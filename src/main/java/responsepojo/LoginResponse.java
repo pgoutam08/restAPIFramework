@@ -7,7 +7,7 @@ public class LoginResponse {
 
 	@SerializedName("username")
 	@Expose
-	private String username;
+	public String username;
 	@SerializedName("trn")
 	@Expose
 	private String trn;
