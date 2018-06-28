@@ -1,6 +1,5 @@
 package com.rest.service.restAPIFramework;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.json.JSONObject;
@@ -17,9 +16,12 @@ import responsepojo.LoginResponse;
 
 
 
-public class Service {
+public class Service{
+	
+	public static String token;
+	
 		
-	public Response loginAPI(String username, String password)
+	public static Response loginAPI(String username, String password)
 	{
 		Login login = new Login();
 		login.setUsername(username);
@@ -28,52 +30,81 @@ public class Service {
 		
 		JSONObject jsonObj = new JSONObject(login);
 		
-		System.out.println("JSON Payload");
-		
-		System.out.println(jsonObj);
-		
 		RequestSpecification reqSpecification = RestAssured.given();
 		reqSpecification.contentType("application/json");
 		reqSpecification.accept("application/json");
-		
-		
 		reqSpecification.body(jsonObj.toString());
-		System.out.println("End Point URI is : "+ServiceURL.loginURL);
-		Response response =  reqSpecification.post(ServiceURL.loginURL);
-	
+			
+		
+		Response response =  reqSpecification.post(ServiceURL.baseURL+ServiceURL.login);
+		
+		token = response.getHeader("Token").toString();
+		
+		/*//retrieve token from response header for authentication in other APIs;
+		public String getToken()
+		{
+			return token;
+			
+		}
+		
+		public void setToken()
+		{
+			token = strToken;
+		}*/
+				
 		return response;
 		
 		
 	}
 	
-	
-	public static void main(String[] args)
-	{
-	
+	private static void getToken() {
+		// TODO Auto-generated method stub
 		
-		
-		Service service = new Service();
-		
-		Response data = service.loginAPI("tim", "password1##");
-		
-		if(data.getStatusCode() == 200)
-		{
-		
-			System.out.println(data.asString());
-			
-			Gson gson = new Gson();
-			
-			LoginResponse loginResponse = gson.fromJson(data.asString(), LoginResponse.class);
-			
-			System.out.println(loginResponse.getUsername());
-			System.out.println(loginResponse.getTrn());
-			System.out.println(loginResponse.getCrmId());
-			
-			Assert.assertEquals(loginResponse.getUsername(), "tim");
-			Assert.assertEquals(loginResponse.getTrn(), "100336302");
-			Assert.assertEquals(loginResponse.getCrmId(), "100008596");
-		
-		}	
 	}
+
+	public static Response getBodyType()
+	{
+		
+		
+	
+		JSONObject jsonObj = new JSONObject();
+		//System.out.println(token);
+		RequestSpecification reqSpecification = RestAssured.given();
+		reqSpecification.contentType("application/json");
+		reqSpecification.accept("application/json");
+		reqSpecification.header("Authorization", "Bearer "+token);
+		reqSpecification.body(jsonObj.toString());
+		//System.out.println(ServiceURL.baseURL+ServiceURL.bodyType);
+		
+		Response response = reqSpecification.get(ServiceURL.baseURL+ServiceURL.bodyType);
+		
+		//System.out.println(response.asString());
+		return response;
+		
+	}
+	
+	
+	public static Response getProfiles(String userName)
+	{
+		
+		
+	
+		JSONObject jsonObj = new JSONObject();
+		//System.out.println(token);
+		RequestSpecification reqSpecification = RestAssured.given();
+		reqSpecification.contentType("application/json");
+		reqSpecification.accept("application/json");
+		reqSpecification.header("Authorization", "Bearer "+token);
+		reqSpecification.body(jsonObj.toString());
+		//System.out.println(ServiceURL.baseURL+ServiceURL.bodyType);
+		
+		Response response = reqSpecification.get(ServiceURL.baseURL+ServiceURL.profile);
+		
+		//System.out.println(response.asString());
+		return response;
+		
+	}
+	
+	
 
 }

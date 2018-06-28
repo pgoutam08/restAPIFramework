@@ -7,5 +7,7 @@ public class TestBase {
 	Service service;
 	
 	Response response;
+	
+	public static volatile String token;
 
 }

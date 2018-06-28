@@ -3,12 +3,12 @@
 <suite guice-stage="DEVELOPMENT" name="Failed suite [Default suite]">
   <test thread-count="5" name="Default test(failed)">
     <classes>
-      <class name="com.rest.service.restAPIFramework.LoginAPITest">
+      <class name="com.rest.service.restAPIFramework.APITest">
         <methods>
-          <include name="loginAPITest"/>
           <include name="dataSetUp"/>
+          <include name="getProfilesAPITest"/>
         </methods>
-      </class> <!-- com.rest.service.restAPIFramework.LoginAPITest -->
+      </class> <!-- com.rest.service.restAPIFramework.APITest -->
     </classes>
   </test> <!-- Default test(failed) -->
 </suite> <!-- Failed suite [Default suite] -->
