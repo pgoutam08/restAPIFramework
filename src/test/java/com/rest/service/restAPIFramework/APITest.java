@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
 import com.google.gson.Gson;
+import com.jayway.restassured.response.Headers;
 
 import responsepojo.GetBodyType;
 import responsepojo.GetProfileResponse;
@@ -44,7 +45,7 @@ public class APITest extends TestBase{
 		
 		loanId = "1";
 		
-		loanPath = "/api/v1/loans/1";
+		loanPath = "/api/v1/loans/";
 		loanStatus = "DRAFT";
 	}
 	
@@ -101,7 +102,8 @@ public class APITest extends TestBase{
 			Gson gson = new Gson();
 			
 			GetBodyType[] bodyData = gson.fromJson(response.asString(), GetBodyType[].class);
-			
+			Headers headers = response.headers();
+			System.out.println(headers.size());
 			
 			list = new ArrayList<Object>();
 			for(int i = 0; i<bodyData.length;i++)
@@ -147,18 +149,17 @@ public class APITest extends TestBase{
 					
 					//System.out.println(loans.get(i).getLoanId());
 					//Assert.assertEquals(loans.get(i).getLoanId(), loanId);
-					Assert.assertEquals(loans.get(i).getLoanPath(), loanPath);
+				//System.out.println((loans.get(i).getClass().equals(String.class)));
+					Assert.assertEquals(loans.get(i).getLoanPath(), loanPath+(i+1));
 					Assert.assertEquals(loans.get(i).getLoanStatus(), loanStatus);
-					
-					
+									
 				}
 		}
 		else
 		{
 			
 			Assert.assertTrue(false, response.asString());
-			
-			
+						
 		}
 
 	}
